@@ -1,0 +1,74 @@
+\documentclass[12pt,a4paper]{article}
+\parskip 4.2pt
+\parindent 8.4pt  % Sets leading space for paragraphs.
+\usepackage[font=sf]{caption} % Changes font of captions.
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{siunitx}
+\usepackage{verbatim}
+\usepackage{hyperref} % Required for inserting clickable links.
+\usepackage{natbib} % Required for APA-style citations.
+\usepackage[top=2cm, left=1.5cm, right=1.5cm, bottom=2cm]{geometry}
+\usepackage[backend=biber]{biblatex}
+\addbibresource{example.bib} 
+\usepackage{hyperref}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+
+\title{Предсказание цены криптовалюты с помощью временных рядов}
+
+
+\author{Работу выполнили:\\Югансон Наталья, Макарова Ксения\\ НИС БЭАД221}
+\date{11 ноября 2023 г.}
+\begin{document}
+\maketitle
+
+
+\newpage
+\tableofcontents
+
+\newpage
+
+\section{Введение}
+Прогнозирование цены криптовалют представляет значительный интерес для многих людей. Это можно делать с помощью временных рядов, что мы и покажем в этой работе. Проанализируем данные за определенный период времени, затем по этим данным построим предсказание и узнаем, насколько наше предположение оказалось верным.
+
+\section{Задача}
+ Предсказать цену на криптовалюту используя разные методы и узнать, какой больше всего подходит для нашего случая. Из датасета известно, в какой момент времени была какая цена. После обработки этих данных мы прогнозируем цену на будущее. Следующим шагом мы считаем среднюю абсолютную ошибку(mae) и узнаем корректность нашего результата. Сравнивая ошибки, понимаем, какой метод привел к лучшему результату.
+ 
+\section{Описание и подготовка данных}
+Датасет содержит данные о цене криптовалюты в течение 547 дней и насколько цена менялась за этот день. Все данные разделяем на тренировочную и тестовую часть. На тренировочной мы будем считать, что должно получиться, а на тестовой проверять, насколько хорошо мы предсказали. Также нужно сформировать данные о предыдущем значении ряда (лаговые признаки) и среднем значение ряда по дню (агрегированные признаки).
+
+\section{Исследуемые методы}
+\subsection{Статистические методы}
+Все статистические методы подходят для стационарных рядов. Поэтому первый шаг это  привести ряд к стационарному, затем с помощью линейной регрессии строим прогноз для стационарного ряда. И применяем обратные преобразования к прогнозу. Для нашего датасета mae получается приблизительно 800. Попробуем еще!
+
+\subsection{Методы машинного обучения}
+Существует много методов машинного обучения для прогнозирования, мы использовали бустинг. Для прогноза в частности использовали библиотеку catboost, модель CatBoostRegressor. Mae получилось 227. Первый график - это спрогнозированная цена на последние 7 дней, а на втором показано, насколько отличается наше предсказанная цена от той, которая будет на самом деле.
+
+\section{Результаты}
+Нет универсального метода, который всегда считал бы цену криптовалюты с минимальной ошибкой, но для нашего случая метод с градиентным бустингом, а именно его частным случаем - моделью catboost оказался лучшим. Этот метод мощен тем, что в процессе работы построил композицию из слабых моделей, деревьев решений. Он способен выявлять сложные нелинейные зависимости в данных, что невозможно сделать вручную. Думаем, текущий результат можно было бы улучшить, если учитывать контекст данной задачи - политический (войны, конфликты), социальные волнения, период анализа, выбранный горизонт прогнозирования и в целом особенности данных. Конечно, на будущее стоило попробовать комбинацию нескольких методов или тщательнее настроить параметры моделей. 
+
+\section{Источники}
+
+\subsection{links on literature:}
+
+1) \href{https://ieeexplore.ieee.org/abstract/document/8404760}{Seçkin Karasu, Aytaç Altan. \emph{Prediction of Bitcoin prices with machine learning methods using time series data}. IEEE, 2018.} (дата обращения: 08.11.2023)
+
+2) \href{https://onlinelibrary.wiley.com/doi/abs/10.1002/isaf.1488}{Murali Mallikarjuna Rao Perumalla, Sanjay Kumar Singh, Aditya Khamparian. \emph{Cryptocurrency price prediction using traditional statistical and machine-learning techniques}. The Journal of Finance, 2021.} (дата обращения: 09.11.2023)
+
+
+3)\href{https://www.sciencedirect.com/science/article/abs/pii/S0045790620307576}{Ahmed Ibrahim, Rasha Kashef. \emph{Predicting market movement direction for bitcoin: A comparison of time series modeling methods}. The Journal of Computers \& Electrical Engineering, 2021.} (дата обращения: 09.11.2023)
+
+    
+
+4)\href{https://www.sciencedirect.com/science/article/abs/pii/S0045790620307576}{Betul AYGUN. \emph{Comparison of Statistical and Machine Learning Algorithms for Forecasting Daily Bitcoin Returns}. The European Journal of Science and Technology, 2021.} (дата обращения: 10.11.2023)
+
+\subsection{online courses used:}
+
+\href{http://wiki.cs.hse.ru/Time_series_modelling_22_23}{\emph{some lectures from fcs course (3d year)}}
+
+
+\end{document}
